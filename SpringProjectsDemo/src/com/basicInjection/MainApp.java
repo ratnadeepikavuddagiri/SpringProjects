@@ -9,7 +9,7 @@ public class MainApp {
 		// TODO Auto-generated method stub
 		AbstractApplicationContext context = new ClassPathXmlApplicationContext("bean.xml");
 		context.start();
-		Foo foo =(Foo) context.getBean("foo");
+		Foo foo =context.getBean("foo",Foo.class);
 		Bar bar = (Bar) context.getBean("bar");
 		bar.setFoo(foo);
 		bar.processFooName();
