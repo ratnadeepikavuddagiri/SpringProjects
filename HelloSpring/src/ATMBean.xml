@@ -1,0 +1,25 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:context = "http://www.springframework.org/schema/context"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:annotation-config />
+	<bean id="savingsAccount" class="com.atmeventhandler.SavingsAccount" scope="prototype">
+      	<constructor-arg index="0" value="1234"></constructor-arg>
+      	<constructor-arg index="1" value="Deepika"></constructor-arg>
+      	<constructor-arg index="2" value="50000"></constructor-arg>
+      </bean>
+      <bean id="salaryAccount" class="com.atmeventhandler.SalaryAccount" scope="prototype">
+      	<constructor-arg index="0" value="5678"></constructor-arg>
+      	<constructor-arg index="1" value="Jhansi"></constructor-arg>
+      	<constructor-arg index="2" value="30000"></constructor-arg>
+      </bean>
+	
+	<bean id="transactionEventListener" class="com.atmeventhandler.TransactionEventListener" />
+	<bean id="withdrawlEventPublisher" class="com.atmeventhandler.WithdrawlEventPublisher" />
+</beans>
