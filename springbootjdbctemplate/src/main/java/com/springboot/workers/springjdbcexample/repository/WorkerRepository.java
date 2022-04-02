@@ -13,11 +13,16 @@ import org.springframework.stereotype.Repository;
 import com.springboot.workers.springjdbcexample.dao.WorkerDao;
 import com.springboot.workers.springjdbcexample.mapper.WorkerMapper;
 import com.springboot.workers.springjdbcexample.model.Worker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Repository
 public class WorkerRepository implements WorkerDao{
 	@Autowired
 	private JdbcTemplate jdbcTemplateObject;
+	private static final Logger log = LoggerFactory.getLogger(WorkerRepository.class);
+
 	
 	@Override
 	public int add(Worker worker) throws SQLException {

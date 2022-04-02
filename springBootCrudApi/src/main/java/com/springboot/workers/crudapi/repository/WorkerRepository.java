@@ -1,4 +1,4 @@
-package com.workers.jdbcexample.repository;
+package com.springboot.workers.crudapi.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,16 +8,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
-import com.workers.jdbcexample.dao.WorkerDao;
-import com.workers.jdbcexample.model.Worker;
-import com.workers.jdbcexample.util.DatabaseConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
+import com.springboot.workers.crudapi.dao.WorkerDao;
+import com.springboot.workers.crudapi.model.Worker;
+import com.springboot.workers.crudapi.util.DatabaseConnection;
 
 @Repository
-public class WorkerRepository implements WorkerDao {
+public class WorkerRepository implements WorkerDao{
 	Connection connection;
 	private static final Logger log = LoggerFactory.getLogger(WorkerRepository.class);
 
@@ -26,8 +26,8 @@ public class WorkerRepository implements WorkerDao {
 	        this.connection  = DatabaseConnection.getConnection();
 	    }
 
-	    @Override
-	public int add(Worker worker)  {
+	@Override
+	public boolean add(Worker worker)  {
 	    String query = "INSERT INTO Worker (WORKER_ID,FIRST_NAME,LAST_NAME,SALARY,JOINING_DATE,DEPARTMENT,email) VALUES (?,?,?,?,?,?,? )";
 	    PreparedStatement ps;
 		try {
@@ -39,27 +39,29 @@ public class WorkerRepository implements WorkerDao {
 			ps.setDate(5, worker.getJoiningDate());
 			ps.setString(6, worker.getDepartment());
 			ps.setString(7, worker.getEmail());
-			return ps.executeUpdate();
+			int rows =  ps.executeUpdate();
+			return rows>=1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			log.error(e.toString());
 		}
-		return 0;
+		return false;
 	}
 
 	@Override
-	public int delete(int workerId)  {
+	public boolean delete(int workerId)  {
 	    String query = "DELETE FROM Worker WHERE WORKER_ID = ?";
-	    int rows=0;
+	    
 	    PreparedStatement preparedStatement;
 		try {
 			preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setInt(1, workerId);
-			rows = preparedStatement.executeUpdate();
+			int rows = preparedStatement.executeUpdate();
+			return rows>=1;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			log.error(e.toString());		}
-		return rows;
+		return false;
 	}
 
 	@Override
@@ -98,7 +100,7 @@ public class WorkerRepository implements WorkerDao {
 	}
 
 	@Override
-	public int update(Worker emp)  {
+	public boolean replace(Worker emp)  {
 	    // TODO Auto-generated method stub
 	   String updateQuery = "UPDATE Worker SET worker_id =?,first_name = ?,last_name =?,salary =?,joining_date = ?,department = ?,email = ? WHERE worker_id = ?";
        PreparedStatement preparedStatement;
@@ -113,11 +115,27 @@ public class WorkerRepository implements WorkerDao {
 		preparedStatement.setString(7, emp.getEmail());
 		preparedStatement.setInt(8, emp.getWorkerId());
 		int rows=preparedStatement.executeUpdate();
-		return rows;
+		return rows>=1;
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
 		log.error(e.toString());	}
-	return 0;
+	return false;
     }
-}
 
+	@Override
+	public boolean updateWorkerEmail(String email,int workerId) {
+		try {
+			String updateQuery = "UPDATE Worker SET email = ? WHERE worker_id = ?";
+			PreparedStatement preparedStatement;
+			preparedStatement = connection.prepareStatement(updateQuery);
+			preparedStatement.setString(1, email);
+			preparedStatement.setInt(2, workerId);
+			int rows =preparedStatement.executeUpdate();
+			return (rows>=1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+}
