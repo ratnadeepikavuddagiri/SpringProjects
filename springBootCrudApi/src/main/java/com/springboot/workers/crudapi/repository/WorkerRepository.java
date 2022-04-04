@@ -27,7 +27,7 @@ public class WorkerRepository implements WorkerDao{
 	    }
 
 	@Override
-	public boolean add(Worker worker)  {
+	public boolean insertWorker(Worker worker)  {
 	    String query = "INSERT INTO Worker (WORKER_ID,FIRST_NAME,LAST_NAME,SALARY,JOINING_DATE,DEPARTMENT,email) VALUES (?,?,?,?,?,?,? )";
 	    PreparedStatement ps;
 		try {
@@ -49,7 +49,7 @@ public class WorkerRepository implements WorkerDao{
 	}
 
 	@Override
-	public boolean delete(int workerId)  {
+	public boolean deleteWorker(int workerId)  {
 	    String query = "DELETE FROM Worker WHERE WORKER_ID = ?";
 	    
 	    PreparedStatement preparedStatement;
@@ -65,7 +65,7 @@ public class WorkerRepository implements WorkerDao{
 	}
 
 	@Override
-	public Worker getWorker(int workerId)  {
+	public Worker findWorkerById(int workerId)  {
 	    String query = "SELECT * FROM WORKER WHERE WORKER_ID=?";
 	    PreparedStatement preparedStatement;
 		try {
@@ -82,7 +82,7 @@ public class WorkerRepository implements WorkerDao{
 	}
 
 	@Override
-	public List<Worker> getWorkers() {
+	public List<Worker> findWorkers() {
 	    String query = "SELECT * FROM worker";
 	    List<Worker> list = new ArrayList<>();
 	    try (Statement statement = connection.createStatement()) {
@@ -100,7 +100,7 @@ public class WorkerRepository implements WorkerDao{
 	}
 
 	@Override
-	public boolean replace(Worker emp)  {
+	public boolean replaceWorker(Worker emp)  {
 	    // TODO Auto-generated method stub
 	   String updateQuery = "UPDATE Worker SET worker_id =?,first_name = ?,last_name =?,salary =?,joining_date = ?,department = ?,email = ? WHERE worker_id = ?";
        PreparedStatement preparedStatement;
@@ -123,7 +123,7 @@ public class WorkerRepository implements WorkerDao{
     }
 
 	@Override
-	public boolean updateWorkerEmail(String email,int workerId) {
+	public boolean updateWorkerEmailById(String email,int workerId) {
 		try {
 			String updateQuery = "UPDATE Worker SET email = ? WHERE worker_id = ?";
 			PreparedStatement preparedStatement;

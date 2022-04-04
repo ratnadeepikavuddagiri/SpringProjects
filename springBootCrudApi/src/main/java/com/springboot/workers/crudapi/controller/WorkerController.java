@@ -18,39 +18,37 @@ import org.springframework.http.HttpStatus;
 
 import com.springboot.workers.crudapi.model.Worker;
 import com.springboot.workers.crudapi.repository.WorkerRepository;
-
-
-
+import com.springboot.workers.crudapi.service.WorkerService;
 
 @RestController
 @RequestMapping("/worker")
 public class WorkerController {
 	@Autowired
-	private WorkerRepository workerRepository;
+	private WorkerService workerService;
 	
 	@GetMapping("/id/{id}")
 	public Worker showWorker(@PathVariable int id) {
-		return this.workerRepository.getWorker(id);
+		return this.workerService.getWorker(id);
 	}
 	
 	@GetMapping("/all")
 	public List<Worker> showWorkers() {
-		return this.workerRepository.getWorkers();
+		return this.workerService.getAllWorkers();
 	}
 	
 	@PostMapping("/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public boolean create(@RequestBody Worker worker) {
-		return this.workerRepository.add(worker);	
+		return this.workerService.createWorker(worker);	
 	}
 	
 	@PatchMapping("/update/id/{id}")
-	public boolean update(@PathVariable int id,@RequestBody Map<String,String> map) {
-		return this.workerRepository.updateWorkerEmail(map.get("email"),id);
+	public boolean update(@PathVariable int id,@RequestBody Map<String,String> requestBody) {
+		return this.workerService.updateWorkerEmail(id,requestBody.get("email"));
 	}
 	
 	@GetMapping("/delete/id/{id}")
 	public boolean delete(@PathVariable int id) {
-		return workerRepository.delete(id);
+		return workerService.deleteWorker(id);
 	}
 }
