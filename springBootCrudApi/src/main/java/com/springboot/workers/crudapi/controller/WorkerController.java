@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
 
 import com.springboot.workers.crudapi.model.Worker;
 import com.springboot.workers.crudapi.repository.WorkerRepository;
@@ -50,5 +52,11 @@ public class WorkerController {
 	@GetMapping("/delete/id/{id}")
 	public boolean delete(@PathVariable int id) {
 		return workerService.deleteWorker(id);
+	}
+	@PostMapping(path = "/createWorker",consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+	public String showAuthCredentials(@RequestParam MultiValueMap<String, String> paramMap) {
+		if(this.workerService.createWorker(new Worker(Integer.parseInt(paramMap.get("workerId").get(0)), paramMap.get("firstName").get(0),paramMap.get("lastName").get(0),Integer.parseInt(paramMap.get("salary").get(0)),Date.valueOf(paramMap.get("joiningDate").get(0)),paramMap.get("department").get(0),paramMap.get("email").get(0))))
+				return "Worker record inserted successfully!";
+		return "Worker record not inserted!";
 	}
 }
